@@ -1,0 +1,14 @@
+{
+    "name": "limingxinleo/support-arr",
+    "description": "This is support for array",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "limx\\": "src"
+        }
+    },
+    "require": {
+        "php": ">=5.6.0"
+    }
+}
