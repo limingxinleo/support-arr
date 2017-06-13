@@ -15,8 +15,15 @@ class BaseTest extends TestCase
 {
     public function testGet()
     {
-        $arr = ['test', 'hello world!'];
+        $arr = ['test' => 'hello world!'];
         $res = Arr::get($arr, 'test', 'no value');
-        print_r($res);
+        $this->assertEquals('hello world!', $res);
+    }
+
+    public function testSet()
+    {
+        $arr = [];
+        $res = Arr::set($arr, 'test', 'hello world!');
+        $this->assertArrayHasKey('test', $arr);
     }
 }
