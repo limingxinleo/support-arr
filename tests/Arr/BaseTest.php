@@ -17,10 +17,11 @@ class BaseTest extends TestCase
         'author' => 'limx',
         'project' => [
             'support' => 'Arr',
-            'version' => '1.0.0'
+            'version' => '1.0.0',
+            'ace' => 1
         ],
         'list' => [
-            'item1', 'item2', 'item3'
+            'item1', 'item2', 'item3', 'item5', 'item4'
         ],
     ];
 
@@ -110,6 +111,54 @@ class BaseTest extends TestCase
         foreach ($res as $item) {
             $this->assertEquals(3, $item);
         }
+    }
+
+    public function testPrepend()
+    {
+        $test = 'add test';
+        $res = Arr::prepend($this->testArr, $test, 'test');
+        $res = Arr::first($res);
+        $this->assertEquals($test, $res);
+    }
+
+    public function testPull()
+    {
+        $res = Arr::pull($this->testArr, 'author');
+        $this->assertEquals('limx', $res);
+        $this->assertArrayNotHasKey('author', $this->testArr);
+    }
+
+    public function testShuffle()
+    {
+        $res = Arr::shuffle($this->testArr);
+        $this->assertArrayNotHasKey('author', $res);
+        $this->assertArrayHasKey('author', $this->testArr);
+
+    }
+
+    public function testSortRecursive()
+    {
+        $res = Arr::sortRecursive($this->testArr);
+        $this->assertEquals('limx', Arr::first($res));
+        $res = Arr::get($res, 'list');
+        foreach ($res as $key => $item) {
+            $this->assertEquals('item' . ($key + 1), $item);
+        }
+    }
+
+    public function testWhere()
+    {
+        $res = Arr::where($this->testArr, function ($item) {
+            return $item === 'limx';
+        });
+
+        $this->assertEquals(['author' => 'limx'], $res);
+    }
+
+    public function testWrap()
+    {
+        $res = Arr::wrap('limx');
+        $this->assertEquals(['limx'], $res);
     }
 
 }
