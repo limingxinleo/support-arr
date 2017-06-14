@@ -361,7 +361,7 @@ class Arr
         list($value, $key) = static::explodePluckParameters($value, $key);
 
         foreach ($array as $item) {
-            $itemValue = data_get($item, $value);
+            $itemValue = static::dataGet($item, $value);
 
             // If the key is "null", we will just append the value to the array and keep
             // looping. Otherwise we will key the array using the value of the key we
@@ -369,7 +369,7 @@ class Arr
             if (is_null($key)) {
                 $results[] = $itemValue;
             } else {
-                $itemKey = data_get($item, $key);
+                $itemKey = static::dataGet($item, $key);
 
                 $results[$itemKey] = $itemValue;
             }
@@ -546,6 +546,47 @@ class Arr
     public static function value($value)
     {
         return $value instanceof Closure ? $value() : $value;
+    }
+
+    /**
+     * Get an item from an array or object using "dot" notation.
+     *
+     * @param  mixed        $target
+     * @param  string|array $key
+     * @param  mixed        $default
+     * @return mixed
+     */
+    public static function dataGet($target, $key, $default = null)
+    {
+        if (is_null($key)) {
+            return $target;
+        }
+
+        $key = is_array($key) ? $key : explode('.', $key);
+
+        while (!is_null($segment = array_shift($key))) {
+            if ($segment === '*') {
+                if ($target instanceof Collection) {
+                    $target = $target->all();
+                } elseif (!is_array($target)) {
+                    return static::value($default);
+                }
+
+                $result = Arr::pluck($target, $key);
+
+                return in_array('*', $key) ? Arr::collapse($result) : $result;
+            }
+
+            if (Arr::accessible($target) && Arr::exists($target, $segment)) {
+                $target = $target[$segment];
+            } elseif (is_object($target) && isset($target->{$segment})) {
+                $target = $target->{$segment};
+            } else {
+                return static::value($default);
+            }
+        }
+
+        return $target;
     }
 
 }
