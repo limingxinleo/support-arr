@@ -72,7 +72,7 @@ class Arr
     /**
      * Cross join the given arrays, returning all possible permutations.
      *
-     * @param  array  ...$arrays
+     * @param  array ...$arrays
      * @return array
      */
     public static function crossJoin(...$arrays)
@@ -131,6 +131,22 @@ class Arr
     {
         static::forget($array, $keys);
 
+        return $array;
+    }
+
+    /**
+     * Get all of the given array except for a specified array of items.
+     *
+     * @param  array        $array
+     * @param  array|string $keys
+     * @return array
+     */
+    public static function exceptByValue($array, $val)
+    {
+        $key = array_search($val, $array);
+        if ($key !== false) {
+            return static::except($array, $key);
+        }
         return $array;
     }
 

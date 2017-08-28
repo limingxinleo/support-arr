@@ -196,4 +196,23 @@ class BaseTest extends TestCase
         $this->assertEquals([], Arr::crossJoin([1, 2], [], ['I', 'II', 'III']));
     }
 
+    public function testExcept()
+    {
+        $result = Arr::except($this->testArr, 'author');
+        $arr = $this->testArr;
+        unset($arr['author']);
+        $this->assertEquals($arr, $result);
+    }
+
+    public function testExceptByValue()
+    {
+        $result = Arr::exceptByValue($this->testArr, 'limx1');
+        $arr = $this->testArr;
+        $this->assertEquals($arr, $result);
+
+        $result = Arr::exceptByValue($this->testArr, 'limx');
+        unset($arr['author']);
+        $this->assertEquals($arr, $result);
+    }
+
 }
