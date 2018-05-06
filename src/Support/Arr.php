@@ -121,6 +121,32 @@ class Arr
     }
 
     /**
+     * Format a 2-dimensional associative array with dots to a multi-dimensional associative array.
+     *
+     * @param  array $array
+     * @return array
+     */
+    public static function dot2Array($array)
+    {
+        $results = [];
+
+        foreach ($array as $key => $value) {
+            if (is_string($key)) {
+                $current = &$results;
+                foreach (explode('.', $key) as $k) {
+                    if (!isset($current[$k])) {
+                        $current[$k] = [];
+                    }
+                    $current = &$current[$k];
+                }
+                $current = $value;
+            }
+        }
+
+        return $results;
+    }
+
+    /**
      * Get all of the given array except for a specified array of items.
      *
      * @param  array        $array

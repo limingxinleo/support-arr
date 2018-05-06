@@ -71,7 +71,7 @@ class BaseTest extends TestCase
             $res['project.support']
         );
     }
-    
+
     public function testHas()
     {
         $res = Arr::has($this->testArr, 'project.support');
@@ -214,6 +214,30 @@ class BaseTest extends TestCase
         $result = Arr::exceptByValue($this->testArr, 'limx');
         unset($arr['author']);
         $this->assertEquals($arr, $result);
+    }
+
+    public function testDotArray()
+    {
+        $result = Arr::dot2Array($this->testArr);
+        $this->assertEquals($this->testArr, $result);
+
+        $testArr1 = [
+            'user.name' => 'limx',
+            'user.sex' => 1,
+            'user.age' => 28,
+            'test.one.name' => 'test',
+            'test.two.name' => 'test2',
+            'books' => ['test', 'test2'],
+        ];
+        $result = Arr::dot2Array($testArr1);
+        $this->assertEquals([
+            'user' => ['name' => 'limx', 'sex' => 1, 'age' => 28],
+            'test' => ['one' => ['name' => 'test'], 'two' => ['name' => 'test2']],
+            'books' => ['test', 'test2'],
+        ], $result);
+
+        $result = Arr::dot2Array(Arr::dot($this->testArr));
+        $this->assertEquals($this->testArr, $result);
     }
 
 }
