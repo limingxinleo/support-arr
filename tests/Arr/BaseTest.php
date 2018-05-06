@@ -65,12 +65,13 @@ class BaseTest extends TestCase
     public function testDot()
     {
         $res = Arr::dot($this->testArr);
+        $this->assertTrue(isset($res['project.support']));
         $this->assertEquals(
             Arr::get($this->testArr, 'project.support'),
             $res['project.support']
         );
     }
-
+    
     public function testHas()
     {
         $res = Arr::has($this->testArr, 'project.support');
